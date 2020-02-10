@@ -122,8 +122,6 @@ export function get_page_handler(
         })
         .join(", ");
 
-      console.log(link);
-
       res.setHeader("Link", link);
     } else {
       const link = preloaded_chunks
