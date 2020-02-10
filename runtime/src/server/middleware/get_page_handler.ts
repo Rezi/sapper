@@ -107,23 +107,27 @@ export function get_page_handler(
       }
     });
 
-    if (build_info.bundler === "rollup") {
-      // TODO add dependencies and CSS
-      /* const link = preloaded_chunks
+    // if (build_info.bundler === "rollup") {
+    // TODO add dependencies and CSS
+    /* const link = preloaded_chunks
         .filter(file => file && !file.match(/\.map$/))
         .map(file => `<${req.baseUrl}/client/${file}>;rel="modulepreload"`)
         .join(", "); */
 
-      const link = preloaded_chunks
-        .filter(file => file && !file.match(/\.map$/))
-        .map(file => {
-          const as = /\.css$/.test(file) ? "style" : "modulepreload";
+    const link = preloaded_chunks
+      .filter(file => file && !file.match(/\.map$/))
+      .map(file => {
+        const as = /\.css$/.test(file) ? "style" : "script";
+        if (as === "script") {
+          return `<${req.baseUrl}/client/${file}>;rel="modulepreload"`;
+        } else {
           return `<${req.baseUrl}/client/${file}>;rel="preload";as="${as}"`;
-        })
-        .join(", ");
+        }
+      })
+      .join(", ");
 
-      res.setHeader("Link", link);
-    } else {
+    res.setHeader("Link", link);
+    /*  } else {
       const link = preloaded_chunks
         .filter(file => file && !file.match(/\.map$/))
         .map(file => {
@@ -133,7 +137,7 @@ export function get_page_handler(
         .join(", ");
 
       res.setHeader("Link", link);
-    }
+    } */
 
     const session = session_getter(req, res);
 
