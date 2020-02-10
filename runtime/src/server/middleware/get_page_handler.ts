@@ -117,7 +117,7 @@ export function get_page_handler(
       const link = preloaded_chunks
         .filter(file => file && !file.match(/\.map$/))
         .map(file => {
-          const as = /\.css$/.test(file) ? "style" : "script";
+          const as = /\.css$/.test(file) ? "style" : "modulepreload";
           return `<${req.baseUrl}/client/${file}>;rel="preload";as="${as}"`;
         })
         .join(", ");
